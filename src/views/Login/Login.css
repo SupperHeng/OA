@@ -1,0 +1,25 @@
+/* src/views/Login.css */
+
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: #f0f2f5;
+}
+
+.login-card {
+  padding: 32px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.login-title {
+  margin-bottom: 16px;
+}
+
+.login-field {
+  margin-bottom: 16px;
+}
