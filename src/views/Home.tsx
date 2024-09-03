@@ -1,3 +1,5 @@
+// /src/views/Home/Home.tsx
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,7 +14,7 @@ const Home: React.FC = () => {
   return (
     <div>
       <h1>Home Page</h1>
-      <button onClick={handleLogout}>Go to Login</button>
+      <button onClick={handleLogout}>Jumo To Login Path</button>
     </div>
   );
 }
