@@ -1,7 +1,6 @@
-// src/views/Login.tsx
-
 import React, { useState } from 'react';
-import { Reshaped, FormControl, Card, TextField, Button } from 'reshaped';
+import { Reshaped, FormControl, Card, TextField, Button, Icon, Checkbox } from 'reshaped';
+import { Eye, EyeOff, Zap } from 'react-feather';
 import 'reshaped/themes/reshaped/theme.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,7 +18,8 @@ const Login: React.FC = () => {
   };
 
   // 查看密码
-  const tabPassword = () => {
+  const viewPassword = () => {
+    console.log('Password visibility toggled');
     setShowPassword(!showPassword);
   };
 
@@ -31,21 +31,49 @@ const Login: React.FC = () => {
   return (
     <div style={pageBox}>
       <Reshaped theme="reshaped">
-        <Card>
+        <Card padding={{
+          s: 4,
+          m: 8
+        }}>
           <FormControl>
-            <FormControl.Label>username</FormControl.Label>
-            <TextField name="name" placeholder="Enter your name" />
-            <FormControl.Helper>这里是状态提示</FormControl.Helper>
-            <FormControl.Label>password</FormControl.Label>
-            <TextField
-              name="password"
-              inputAttributes={{ type: showPassword ? "text" : "password" }}
-              placeholder="Enter your password"
-              // endIcon={}
-            />
-            <FormControl.Helper>这里是状态提示</FormControl.Helper>
+            <div style={{
+              display: 'grid',
+              gap: '10px',
+            }}>
+              <div>
+                <FormControl.Label>username</FormControl.Label>
+                <TextField name="name" placeholder="Enter your name" />
+                <FormControl.Helper>这里是状态提示</FormControl.Helper>
+              </div>
+              <div>
+                <FormControl.Label>password</FormControl.Label>
+                <TextField
+                  name="password"
+                  inputAttributes={{ type: showPassword ? "text" : "password" }}
+                  placeholder="Enter your password"
+                  endSlot={
+                    <div onClick={viewPassword} >
+                      <Icon size="autoWidth" svg={showPassword ? Eye : EyeOff} />
+                    </div>
+                  }
+                />
+                <FormControl.Helper>这里是状态提示</FormControl.Helper>
+              </div>
+              <div>
+                <Checkbox name="keepSigned">
+                  Keep me signed in
+                </Checkbox>
+              </div>
+              <div style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+                <Button size='small' icon={Zap} onClick={jumpToLogin}>Login in</Button>
+              </div>
+            </div>
           </FormControl>
-          <Button size='small' onClick={jumpToLogin}>Login in</Button>
         </Card>
       </Reshaped>
     </div>
