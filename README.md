@@ -1,6 +1,11 @@
-# React + TypeScript + Vite
+# React + TypeScript + SWC + Vite + Reshaped + React-Feather
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Component Add Icon Reference
+- [Reshaped Storybook](https://reshaped.so/storybook/index.html)
+- [React-Feather](https://feathericons.com/)
+
+
+<!-- This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
 
@@ -47,4 +52,4 @@ export default tseslint.config({
     ...react.configs['jsx-runtime'].rules,
   },
 })
-```
+``` -->
