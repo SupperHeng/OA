@@ -1,5 +1,13 @@
-# React + TypeScript + SWC + Vite + Reshaped + React-Feather
+# Project Introduction
 
+The README file for this project is available in multiple languages:
+
+- [English](./README.md)
+- [简体中文](./README.zh-CN.md)
+
+```
+React + TypeScript + SWC + Vite + Reshaped + React-Feather
+```
 Component add Icon Official Documentation Reference:
 - [Reshaped Storybook](https://reshaped.so/storybook/index.html)
 - [React-Feather](https://feathericons.com/)
