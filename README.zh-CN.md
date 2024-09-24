@@ -7,7 +7,6 @@
 - [React-Feather](https://feathericons.com/)
 
 ### 项目依赖（任选一个包管理工具）：
-
 ```
 npm i
 pnpm i
@@ -15,11 +14,17 @@ yarn
 ```
 
 ### 启动项目：
-
 ```
 npm run dev
 pnpm run dev
 yarn dev
+```
+
+### 检查代
+```
+npm lint
+pnpm lint
+yarn lint
 ```
 
 ## 分支命名：

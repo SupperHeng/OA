@@ -25,6 +25,12 @@ pnpm run dev
 yarn dev
 ```
 
+### Check Code
+```
+npm lint
+pnpm lint
+yarn l
+
 ## Branch naming：
 
 - reference [vue](https://github.com/vuejs/vue/blob/dev/.github/COMMIT_CONVENTION.md) specification ([Angular](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular))
