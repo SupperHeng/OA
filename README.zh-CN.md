@@ -6,6 +6,11 @@
 - [Reshaped Storybook](https://reshaped.so/storybook/index.html)
 - [React-Feather](https://feathericons.com/)
 
+### 项目结构
+```
+
+```
+
 ### 项目依赖（任选一个包管理工具）：
 ```
 npm i
@@ -20,7 +25,7 @@ pnpm run dev
 yarn dev
 ```
 
-### 检查代
+### 检查代码
 ```
 npm lint
 pnpm lint
@@ -42,3 +47,11 @@ yarn lint
   - `ci` 持续集成
   - `types` 类型定义文件更改
   - `wip` 开发中
+
+### feather-icon的使用方法
+```
+feather-icon 的命名标准是【大驼峰】
+打开官网会发现很多类似a-b的
+这种我们直接改成大驼峰命名即可，比如:
+alert-circle => AlertCircle 
+```
