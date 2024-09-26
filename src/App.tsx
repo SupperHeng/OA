@@ -1,11 +1,12 @@
 import React from 'react';
 import AppRouter from './router';
-
+import { Reshaped } from 'reshaped';
+import '@/styles/App.css';
 const App: React.FC = () => {
   return (
-    <div className="App">
+    <Reshaped theme="reshaped">
       <AppRouter />
-    </div>
+    </Reshaped>
   );
 }
 

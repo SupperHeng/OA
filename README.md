@@ -1,50 +1,49 @@
-# React + TypeScript + Vite
+# Project Introduction
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The README file for this project is available in multiple languages:
 
-Currently, two official plugins are available:
+- [English](./README.md)
+- [简体中文](./README.zh-CN.md)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```
+React + TypeScript + SWC + Vite + Reshaped + React-Feather
+```
+Component add Icon Official Documentation Reference:
+- [Reshaped Storybook](https://reshaped.so/storybook/index.html)
+- [React-Feather](https://feathericons.com/)
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### Project dependency（any package manager）：
+```
+npm i
+pnpm i
+yarn
+```
+### Project Start：
+```
+npm run dev
+pnpm run dev
+yarn dev
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+### Check Code
 ```
+npm lint
+pnpm lint
+yarn l
+
+## Branch naming：
+
+- reference [vue](https://github.com/vuejs/vue/blob/dev/.github/COMMIT_CONVENTION.md) specification ([Angular](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular))
+  - `feat` Add new features
+  - `fix` Fix the problem/BUG
+  - `style` The code style is related and does not affect the running result
+  - `perf` Optimization/performance improvement
+  - `refactor` Refactor
+  - `revert` Undo edit
+  - `test` Test related
+  - `docs` Documentation/notes
+  - `chore` Dependency update/scaffolding configuration modification etc.
+  - `ci` Continuous integration
+  - `types` Type definition file changes
+  - `wip` In development
+
