@@ -7,16 +7,19 @@ import { loginApi } from "@/api/loginApi/login";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
 
-  const viewPassword = () => {
-    setShowPassword(!showPassword);
-  };
+  const [showPassword, setShowPassword] = useState(false);
 
   const [userInfo, setUserInfo] = useState({
     memberId: "",
     memberPwd: ""
   })
+
+  const [loginState, setLoginState] = useState({state: ""})
+
+  const viewPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleChange = (e: { name: string; value: string }) => {
     const { name, value } = e;
@@ -28,9 +31,12 @@ const Login: React.FC = () => {
 
   const login = async () => {
     try {
-      const res = await loginApi(userInfo);
-      if(res.code === 20001)  navigate("/home");
-      else return;
+      const { data: res } = await loginApi(userInfo);
+      if(res.code === 20001) {
+        localStorage.setItem("satoken", res.data.tokenValue);
+        navigate("/home");
+      }
+      else setLoginState({state: res.msg});
     }
     catch(err) {
       console.error(err);
@@ -44,7 +50,6 @@ const Login: React.FC = () => {
           <FormControl.Label>username</FormControl.Label>
           <TextField name="memberId" id="username" placeholder="Enter your name" onChange={handleChange} />
         </FormControl>
-
         <FormControl>
           <FormControl.Label>password</FormControl.Label>
           <TextField
@@ -54,12 +59,10 @@ const Login: React.FC = () => {
               <Button onClick={viewPassword} icon={showPassword ? Eye : EyeOff} color={'media'} size={"small"} />
             }
           />
+          <FormControl.Helper>{loginState.state || "\u00A0"}</FormControl.Helper>
         </FormControl>
-
-        {/* <FormControl.Helper>这里是状态提示</FormControl.Helper> */}
-
         <View align={"center"}><Button size="small" icon={Zap} onClick={login}> Login in </Button></View>
-        </View>
+      </View>
     </Card>
   )
 };
