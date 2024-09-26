@@ -9,12 +9,9 @@ const AppRouter: React.FC = () => {
   return (
     <Router>
       <Routes>
-        {/* 留给自定义layout用的 */}
-        {/* <Route path="/" element={<Layout />}> */}
           <Route index element={<Login />} />
           <Route path='login' element={<Login />} />
           <Route path="home" element={<Home />} />
-        {/* </Route> */}
       </Routes>
     </Router>
   );
