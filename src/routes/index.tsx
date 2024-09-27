@@ -1,0 +1,29 @@
+// src/routes/index.tsx
+
+import React, { Suspense } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Loader } from 'reshaped';
+import paths from './path';
+import Login from '@/pages/Login';
+import Layout from '@/pages/Layout';
+
+const AppRouter: React.FC = () => {
+  return (
+    <Router>
+      <Suspense fallback={<Loader size="medium" />}>
+        <Routes>
+          <Route path='login' element={<Login />} />
+          <Route path='*' element={<Layout />} >
+            {
+              paths.map(({ path, component: Component }) => (
+                <Route key={path} path={path} element={<Component />} />
+              ))
+            }
+          </Route>
+        </Routes>
+      </Suspense>
+    </Router>
+  );
+}
+
+export default AppRouter;
