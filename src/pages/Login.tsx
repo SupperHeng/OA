@@ -44,7 +44,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <View align="center" justify="center" height="100vh">
+    <View align="center" justify="center" width="100vw" height="100vh">
       <Card padding={6}>
         <View gap={3} direction="column">
           <FormControl>
