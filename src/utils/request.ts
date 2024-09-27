@@ -1,14 +1,14 @@
 import axios from 'axios';
 
 const request = axios.create({
-  baseURL: 'http://www.fmin-courses.com:4106',
+  baseURL: '/url',
   timeout: 3000,
   headers: {'Content-Type': 'application/json'}
 })
 
 request.interceptors.request.use( config => {
   const satoken = localStorage.getItem('satoken');
-  if(satoken) config.headers['Authorization'] = `satoken ${satoken}`;
+  if(satoken) config.headers['satoken'] = satoken;
   return config;
 }, error => {
   return Promise.reject(error);
