@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Loader } from 'reshaped';
 import paths from './path';
 import Login from '@/pages/Login';
+import Home from '@/pages/Home';
 import Layout from '@/pages/Layout';
 
 const AppRouter: React.FC = () => {
@@ -14,15 +15,16 @@ const AppRouter: React.FC = () => {
         <Routes>
           <Route path='login' element={<Login />} />
           <Route path='*' element={<Layout />} >
-            {
-              paths.map(({ path, component: Component }) => (
-                <Route key={path} path={path} element={<Component />} />
-              ))
-            }
-          </Route>
-        </Routes>
-      </Suspense>
-    </Router>
+            <Route path='*' element={<Home />}></Route>
+              {
+                paths.map(({ path, component: Component }) => (
+                  <Route key={path} path={path} element={<Component />} />
+                ))
+              }
+            </Route>
+          </Routes>
+        </Suspense>
+      </Router>
   );
 }
 
