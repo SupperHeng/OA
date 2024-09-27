@@ -56,7 +56,7 @@ const Login: React.FC = () => {
             name="memberPwd" id="password" placeholder="Enter your password"
             inputAttributes={{ type: showPassword ? "text" : "password" }} onChange={handleChange}
             endSlot={
-              <Button onClick={viewPassword} icon={showPassword ? Eye : EyeOff} color={'media'} size={"small"} />
+              <Button onClick={viewPassword} icon={showPassword ? Eye : EyeOff} variant="ghost" size={"small"} />
             }
           />
           <FormControl.Helper>{loginState.state || "\u00A0"}</FormControl.Helper>
