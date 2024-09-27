@@ -15,7 +15,7 @@ const Login: React.FC = () => {
     memberPwd: ""
   })
 
-  const [loginState, setLoginState] = useState({state: ""})
+  const [loginState, setLoginState] = useState({ state: "" })
 
   const viewPassword = () => {
     setShowPassword(!showPassword);
@@ -32,38 +32,40 @@ const Login: React.FC = () => {
   const login = async () => {
     try {
       const { data: res } = await loginApi(userInfo);
-      if(res.code === 20001) {
+      if (res.code === 20001) {
         localStorage.setItem("satoken", res.data.tokenValue);
         navigate("/home");
       }
-      else setLoginState({state: res.msg});
+      else setLoginState({ state: res.msg });
     }
-    catch(err) {
+    catch (err) {
       console.error(err);
     }
   };
 
   return (
-    <Card padding={6}>
-      <View gap={3} direction="column">
-        <FormControl>
-          <FormControl.Label>username</FormControl.Label>
-          <TextField name="memberId" id="username" placeholder="Enter your name" onChange={handleChange} />
-        </FormControl>
-        <FormControl>
-          <FormControl.Label>password</FormControl.Label>
-          <TextField
-            name="memberPwd" id="password" placeholder="Enter your password"
-            inputAttributes={{ type: showPassword ? "text" : "password" }} onChange={handleChange}
-            endSlot={
-              <Button onClick={viewPassword} icon={showPassword ? Eye : EyeOff} variant="ghost" size={"small"} />
-            }
-          />
-          <FormControl.Helper>{loginState.state || "\u00A0"}</FormControl.Helper>
-        </FormControl>
-        <View align={"center"}><Button size="small" icon={Zap} onClick={login}> Login in </Button></View>
-      </View>
-    </Card>
+    <View align="center" justify="center" height="100vh">
+      <Card padding={6}>
+        <View gap={3} direction="column">
+          <FormControl>
+            <FormControl.Label>username</FormControl.Label>
+            <TextField name="memberId" id="username" placeholder="Enter your name" onChange={handleChange} />
+          </FormControl>
+          <FormControl>
+            <FormControl.Label>password</FormControl.Label>
+            <TextField
+              name="memberPwd" id="password" placeholder="Enter your password"
+              inputAttributes={{ type: showPassword ? "text" : "password" }} onChange={handleChange}
+              endSlot={
+                <Button icon={showPassword ? Eye : EyeOff} variant="ghost" size="small" onClick={viewPassword} />
+              }
+            />
+            <FormControl.Helper>{loginState.state || "\u00A0"}</FormControl.Helper>
+          </FormControl>
+          <View align={"center"}><Button size="small" icon={Zap} onClick={login}> Login in </Button></View>
+        </View>
+      </Card>
+    </View>
   )
 };
 
