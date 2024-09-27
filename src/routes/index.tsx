@@ -15,7 +15,7 @@ const AppRouter: React.FC = () => {
         <Routes>
           <Route path='login' element={<Login />} />
           <Route path='*' element={<Layout />} >
-            <Route path='*' element={<Home />}></Route>
+            <Route index element={<Home />}></Route>
             {
               paths.map(({ path, component: Component }) => (
                 <Route key={path} path={path} element={<Component />} />
