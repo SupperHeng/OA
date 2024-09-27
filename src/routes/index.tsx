@@ -6,7 +6,7 @@ import { Loader } from 'reshaped';
 import paths from './path';
 import Login from '@/pages/Login';
 import Home from '@/pages/Home';
-import Layout from '@/layout/index';
+import Layout from '@/pages/Layout';
 
 const AppRouter: React.FC = () => {
   return (
@@ -16,15 +16,15 @@ const AppRouter: React.FC = () => {
           <Route path='login' element={<Login />} />
           <Route path='*' element={<Layout />} >
             <Route path='*' element={<Home />}></Route>
-            {
-              paths.map(({ path, component: Component }) => (
-                <Route key={path} path={path} element={<Component />} />
-              ))
-            }
-          </Route>
-        </Routes>
-      </Suspense>
-    </Router>
+              {
+                paths.map(({ path, component: Component }) => (
+                  <Route key={path} path={path} element={<Component />} />
+                ))
+              }
+            </Route>
+          </Routes>
+        </Suspense>
+      </Router>
   );
 }
 
