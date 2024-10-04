@@ -2,13 +2,10 @@
 
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import { View, MenuItem, Link } from 'reshaped';
+import { View, MenuItem } from 'reshaped';
 import { topMenus, leftMenus } from './menus';
 
 const Layout: React.FC = () => {
-  const selectState = () => {
-    // console.log(e)
-  }
   return (
     <View width="100vw" height="100vh" gap={3}>
       <View direction="column">
@@ -16,10 +13,8 @@ const Layout: React.FC = () => {
         <View direction="row" height="61px">
           {
             topMenus.map((item, index) => (
-              <View width={100}>
-                <MenuItem key={index} onClick={selectState}>
-                  <Link href={item.path} variant="plain">{item.label}</Link>
-                </MenuItem>
+              <View key={index} width={100}>
+                <MenuItem href={item.path}>{item.label}</MenuItem>
               </View>
             ))
           }
@@ -29,9 +24,7 @@ const Layout: React.FC = () => {
           <View direction="column" gap={3} minHeight={200} width={'264px'}>
             {
               leftMenus.map((item, index) => (
-                <MenuItem key={index}>
-                  <Link href={item.path} variant="plain">{item.label}</Link>
-                </MenuItem>
+                <MenuItem key={index} href={item.path}>{item.label}</MenuItem>
               ))
             }
           </View>

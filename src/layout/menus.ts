@@ -13,11 +13,11 @@ const topMenus = [
 
 const leftMenus = [
   {
-    label: 'Home',
+    label: 'Home Page',
     path: '/home',
   },
   {
-    label: 'Themes',
+    label: 'Themes Page',
     path: '/themes',
   },
 ]
