@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const request = axios.create({
-  baseURL: '/url',
+  baseURL: '/api',
   timeout: 3000,
   headers: {'Content-Type': 'application/json'}
 })

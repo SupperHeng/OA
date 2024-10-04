@@ -7,8 +7,9 @@ import 'reshaped/themes/reshaped/theme.css';
 import 'reshaped/themes/slate/theme.css';
 
 const App: React.FC = () => {
+  const theme = import.meta.env.VITE_THEME;
   return (
-    <Reshaped theme="reshaped">
+    <Reshaped theme={theme}>
       <AppRouter />
     </Reshaped>
   );

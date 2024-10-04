@@ -6,12 +6,11 @@ import path from 'path'
 export default defineConfig({
   plugins: [react()],
   server: { 
-    open: true,
     proxy: {
-      '/url': {
+      '/api': {
         target: 'http://www.fmin-courses.com:4106',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/url/, '')
+        rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
   },
@@ -21,3 +20,9 @@ export default defineConfig({
     }
   }
 })
+
+// 加载环境变量标识
+const mode = process.env.NODE_ENV
+console.log("-----------------------");
+console.log("| VITE_NAME：" + `${mode == 'development' ? '开发模式' : '生产模式'} |`);
+console.log("-----------------------");
