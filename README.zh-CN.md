@@ -8,7 +8,7 @@
 
 ### 项目结构
 ```
-
+React + TypeScript + SWC + Vite + Reshaped + React-Feather
 ```
 
 ### 项目依赖（任选一个包管理工具）：
@@ -54,4 +54,20 @@ feather-icon 的命名标准是【大驼峰】
 打开官网会发现很多类似a-b的
 这种我们直接改成大驼峰命名即可，比如:
 alert-circle => AlertCircle 
+```
+
+### 版本调试
+```
+yarn vite --mode --production   # 切换生产环境调试
+yarn vite --mode --development  # 切换开发模式调试
+```
+
+### Docker部署
+```
+fontend-project/
+├── dist/
+├── Dockerfile
+├── nginx.conf
+├── package.json
+└── yarn.lock
 ```

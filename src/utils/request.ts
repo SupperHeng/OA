@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const request = axios.create({
-  baseURL: '/api',
+  baseURL: 'http://www.fmin-courses.com:4106',
   timeout: 3000,
   headers: {'Content-Type': 'application/json'}
 })
