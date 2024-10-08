@@ -1,6 +1,12 @@
 // src/layout/menus.ts
 
-const topMenus = [
+interface menuType {
+  label: string
+  path?: string
+  children?: menuType[]
+}
+
+const topMenus: menuType[] = [
   {
     label: 'Home',
     path: '/home',
@@ -11,21 +17,21 @@ const topMenus = [
   },
 ]
 
-const leftMenus = [
+const leftMenus: menuType[] = [
   {
     label: '展开菜单',
     children: [
       {
         label: '展开1',
-        path: './'
+        path: '/themes'
       },
       {
         label: '展开2',
-        path: './'
+        path: '/themes'
       },
       {
         label: '展开3',
-        path: './'
+        path: '/themes'
       },
     ]
   },
