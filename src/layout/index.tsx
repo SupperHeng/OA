@@ -2,11 +2,9 @@
 
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { View, MenuItem, Button } from 'reshaped';
+import { View, MenuItem, Button, useTheme } from 'reshaped';
 import { ChevronDown, ChevronUp, Sun, Moon } from 'react-feather';
 import { topMenus, leftMenus } from './menus';
-import { useRecoilState } from 'recoil';
-import { themeState } from '@/store';
 
 const Layout: React.FC = () => {
   // 菜单展开状态 /
@@ -16,18 +14,13 @@ const Layout: React.FC = () => {
   const viewItem = () => { setShow(!show); }
 
   /** 主题状态 */
-  const [theme, setTheme] =  useRecoilState(themeState);
-
-  /** 切换主题 */
-  const changeTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
-  }
+  const { colorMode, invertColorMode } = useTheme();
 
   // 菜单组件
   const showMenu = leftMenus.map(item => (
     item.children ? (
       <View key={item.label}>
-        <Button endIcon={show ? ChevronDown : ChevronUp} onClick={viewItem}>{item.label}</Button>
+        <Button endIcon={show ? ChevronDown : ChevronUp} variant="ghost" onClick={viewItem}>{item.label}</Button>
         { 
           show && item.children.map(child => (
             <MenuItem key={child.label} href={child.path}>{child.label}</MenuItem>
@@ -50,7 +43,7 @@ const Layout: React.FC = () => {
             ))
           }
           {/* 切换深色主题 */}
-          <Button icon={theme === 'light' ? Sun : Moon} onClick={changeTheme}></Button>
+          <Button icon={colorMode === 'light' ? Sun : Moon} onClick={invertColorMode} variant="ghost"></Button>
         </View>
         {/* Menus */}
         <View direction="row" width="100vw">
