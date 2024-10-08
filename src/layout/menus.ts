@@ -20,5 +20,9 @@ const leftMenus = [
     label: 'Themes Page',
     path: '/themes',
   },
+  {
+    label: 'Team member certificate',
+    path: '/certificate',
+  },
 ]
 export { topMenus, leftMenus };

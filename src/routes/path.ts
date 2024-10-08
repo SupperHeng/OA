@@ -16,6 +16,10 @@ const paths = [
     component: lazy(() => import('@/pages/Themes')),
   },
   {
+    path: 'certificate',
+    component: lazy(() => import('@/pages/certificate/index')),
+  },
+  {
     path: '*',
     component: lazy(() => import('@/pages/NotFound')),
   }

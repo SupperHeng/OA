@@ -8,10 +8,10 @@ export default defineConfig({
   server: { 
     proxy: {
       '/api': {
-        target: 'http://www.fmin-courses.com:4106',
+        target: 'http://112.124.58.71:9005',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
-      }
+      },
     }
   },
   resolve: {
