@@ -1,7 +1,7 @@
 // src/pages/Home/index.tsx
 
 import React, { useEffect, useState } from "react";
-import { Button, useToast, View, Resizable, Table, Checkbox, Image, Badge, Text, DropdownMenu, Icon, Switch, Card, RadioGroup, Radio, Tabs, Divider, TextField, Loader, Pagination } from "reshaped";
+import { Button, useToast, View, Resizable, Table, Checkbox, Image, Badge, Text, DropdownMenu, Icon, Switch, Card, RadioGroup, Radio, Tabs, Divider, TextField, Loader, Pagination, Scrim, Skeleton, Modal, Dismissible, useToggle } from "reshaped";
 import type { ToastProps } from "reshaped";
 import { Check, Code, ChevronDown, Edit, Trash2, X, Columns, Search } from 'react-feather';
 import {
@@ -13,6 +13,7 @@ import {
   recordCertificateDataType,
   apiType,
 } from "@/api/certificateApi";
+
 
 const CertificateTable: React.FC = () => {
   return (
@@ -38,25 +39,33 @@ function toastShow(text: string, icon: any, position?: any) {
 }
 // 数据分割
 const divisionData = (data: recordCertificateDataType[], type: string) => {
-  let publishedArr = [] as recordCertificateDataType[];
-  let unpublishArr = [] as recordCertificateDataType[];
+  let publishedArr = [[] as recordCertificateDataType[]];
+  let unpublishArr = [[] as recordCertificateDataType[]];
+  function convertTo2DArray(arr: recordCertificateDataType[], size: number) {
+    let result = [];
+    for (let i = 0; i < arr.length; i += size) {
+      result.push(arr.slice(i, i + size));
+    }
+    return result;
+  }
   data.forEach(item => {
     if (item.isPublish) {
-      publishedArr.push(item);
+      publishedArr[0].push(item);
     } else {
-      unpublishArr.push(item);
+      unpublishArr[0].push(item);
     }
   });
+  publishedArr = convertTo2DArray(publishedArr[0], 5)
+  unpublishArr = convertTo2DArray(unpublishArr[0], 5)
   return type == 'published' ? publishedArr : unpublishArr
-}
-const ss = (setSelected: Function) => {
-
 }
 // 页面整体内容布局
 const StretchableCotent = () => {
   const [tableDataList, setTable] = useState([] as recordCertificateDataType[]);
   const [selected, setSelected] = useState(0);
+  const [isLoading, setLoading] = useState(false);
   const [tab, setTab] = useState('published');
+  const [pageNumber, setPageNumber] = useState(0);
   useEffect(() => {
     const fetchData = async () => {
       await getCertificateData('null').then((result) => {
@@ -64,7 +73,7 @@ const StretchableCotent = () => {
       });
     };
     fetchData();
-  }, []);
+  }, [pageNumber, selected]);
 
   return (
     <>
@@ -73,36 +82,78 @@ const StretchableCotent = () => {
           <View.Item>
             <View gap={5}>
               <View.Item >
-                <TopContent setTab={setTab} setTable={setTable}></TopContent>
+                <TopContent setPageNumber={setPageNumber} setTab={setTab} setTable={setTable}></TopContent>
               </View.Item>
+              {tableDataList?.length ?
+                <View.Item>
+                  <Card elevated padding={0}>
+                    {isLoading ?
+                      <Scrim
+                        backgroundSlot={
+                          <TableCotent setTable={setTable} tableDataList={divisionData(tableDataList, tab)[pageNumber]} setSelected={setSelected} selected={selected}></TableCotent>
+                        }>
+                        <View align={"center"} justify={"center"}>
+                          <Loader size="medium" />
+                        </View>
+                      </Scrim>
+                      : <TableCotent setTable={setTable} tableDataList={divisionData(tableDataList, tab)[pageNumber]} setSelected={setSelected} selected={selected}></TableCotent>
+                    }
+                  </Card>
+
+                </View.Item>
+                : <Loader size="medium" />
+              }
               <View.Item>
-                <TableCotent setTable={setTable} tableDataList={divisionData(tableDataList, tab)} setSelected={setSelected} selected={selected}></TableCotent>
+                <BottomContent setPageNumber={setPageNumber} pageNumber={pageNumber} tableDataList={divisionData(tableDataList, tab)}></BottomContent>
               </View.Item>
-              <View.Item></View.Item>
             </View>
           </View.Item>
           <View.Item>
-            <BaseInfoCard tableDataList={divisionData(tableDataList, tab)} selected={selected}></BaseInfoCard>
+            {tableDataList?.length ?
+              <BaseInfoCard tableDataList={divisionData(tableDataList, tab)[pageNumber]} selected={selected}></BaseInfoCard>
+              : null
+            }
           </View.Item>
         </View>
       </View>
+
     </>
   )
 }
 // 底部分页以及总数统计
-const BottomContent = () => {
-  
+const BottomContent = (data: { tableDataList: recordCertificateDataType[][], setPageNumber: Function, pageNumber: number }) => {
+  let tableDataList = data.tableDataList.flat();
+  let setPageNumber = data.setPageNumber;
+  let pageNumber = data.pageNumber;
+  let total = Math.ceil(tableDataList.length / 5);
+  return (
+    <>
+      {total ?
+        <Pagination
+          total={total}
+          page={pageNumber + 1}
+          previousAriaLabel="Previous page"
+          nextAriaLabel="Next page"
+          onChange={(args) => setPageNumber(args.page - 1)}
+        />
+        : null
+      }
+    </>
+  )
+
 }
 // 顶部tab以及搜索框
-const TopContent = (res: { setTab: Function, setTable: Function }) => {
+const TopContent = (res: { setTab: Function, setTable: Function, setPageNumber: Function }) => {
   let setTab = res.setTab;
   let setTable = res.setTable;
+  let setPageNumber = res.setPageNumber;
   return (
     <>
       <Card elevated padding={1}>
         <View direction={"row"} align={"center"} gap={150}>
           <Tabs variant="pills-elevated" name="tabs" onChange={(({ value }) => {
-            setTab(value)
+            setTab(value);
+            setPageNumber(0);
           })}>
             <Tabs.List>
               <Tabs.Item value="published">published</Tabs.Item>
@@ -115,7 +166,8 @@ const TopContent = (res: { setTab: Function, setTable: Function }) => {
             variant="faded"
             placeholder="Enter winner"
             onBlur={(async (e) => {
-              setTable(await getCertificateData(e.target.value))
+              setTable(await getCertificateData(e.target.value));
+              setPageNumber(0);
             })}
           />
         </View>
@@ -208,9 +260,8 @@ const TableCotent = (data: { tableDataList: recordCertificateDataType[], setSele
   let setTable = data.setTable;
   return (
     <RadioGroup name="animalCustom" defaultValue="0">
-      <Pagination total={1} previousAriaLabel="Previous page" nextAriaLabel="Next page" />
       <View width="1000px" maxWidth="100%">
-        <Card elevated padding={0}>
+        {tableDataList?.length ?
           <Table border >
             <Table.Row highlighted>
               {tableHeadList.map((title, index) => (
@@ -232,20 +283,28 @@ const TableCotent = (data: { tableDataList: recordCertificateDataType[], setSele
                 >
                   <Radio value={String(index)} onChange={(() => { setSelected(index) })} />
                 </Table.Cell>
-                <TableCell cellValue={item} setTable={setTable}></TableCell>
-
+                <TableCell setSelected={setSelected} cellValue={item} setTable={setTable}></TableCell>
+                <Table.Cell
+                  verticalAlign="center"
+                  align="center">
+                  <HandleTable info={item} setTable={setTable}></HandleTable>
+                </Table.Cell>
               </Table.Row>
             ))}
           </Table>
-        </Card>
+          : <View height={80}>
+            <Scrim>空页面</Scrim>
+          </View>
+        }
       </View >
-    </RadioGroup>
+    </RadioGroup >
   );
 }
 
 // 表格每列数据
-const TableCell = (res: { cellValue: recordCertificateDataType, setTable: Function }) => {
+const TableCell = (res: { cellValue: recordCertificateDataType, setTable: Function, setSelected: Function }) => {
   let cellValue = res.cellValue;
+  let setSelected = res.setSelected;
   type FooType = keyof typeof cellValue;
   let arr = [] as Array<{ value: string, name: string }>;
   let setTable = res.setTable;
@@ -294,9 +353,9 @@ const TableCell = (res: { cellValue: recordCertificateDataType, setTable: Functi
                   name={String(index)}
                   checked={Number(item.value) >= 1 ? true : false}
                   onChange={async (value) => {
-                    await switchTablePublish(res.cellValue, value.checked, setTable)
+                    await switchTablePublish(res.cellValue, value.checked, setTable, setSelected)
                     /* Update your state here */
-                  }}>{Number(item.value) >= 1 ? 'true' : 'false'}</Switch>
+                  }}></Switch>
                 :
                 <View as="ul">
                   <View.Item as="li">{item.value}</View.Item>
@@ -306,16 +365,66 @@ const TableCell = (res: { cellValue: recordCertificateDataType, setTable: Functi
           </Table.Cell>
         ))
       }
-      <Table.Cell
-        verticalAlign="center"
-        align="center">
-        <HandleTable></HandleTable>
-      </Table.Cell>
     </>
   )
 }
 // 表格操作按钮
-const HandleTable = () => {
+const HandleTable = (res: { info: recordCertificateDataType, setTable: Function }) => {
+  const { active, activate, deactivate } = useToggle(false);
+  let note = '';
+  let info = res.info;
+  let setTable = res.setTable;
+  // 删除api
+  async function deleted(info: recordCertificateDataType, note: string) {
+    let data = {
+      id: info.id,
+      username: '暂无登录',
+      note: note
+    }
+    try {
+      let res = (await deletedCertificateDataApi(data)).data;
+      if (res.code == 200) {
+        let tableDataList = await getCertificateData('null');
+        setTable(tableDataList)
+        deactivate()
+        // toastShow('操作成功', Check, 'top')
+      } else {
+        console.error(res.msg)
+        // toastShow(res.msg, X, 'top')
+      }
+    } catch (error) {
+      // toastShow('接口错误,请联系开发', X, 'top')
+      console.error('删除证书数据接口错误')
+    }
+  }
+
+  const ModalPage = () => {
+    return (
+      <Modal active={active} onClose={deactivate}>
+        <View gap={3}>
+          <Dismissible onClose={deactivate} closeAriaLabel="Close modal">
+            <Modal.Title>deletion reason</Modal.Title>
+          </Dismissible>
+          <TextField
+            name="email"
+            placeholder="Enter deletion reason "
+            onBlur={(e) => note = e.target.value}
+          />
+          <View direction={"row"} align={"center"} justify={"center"} gap={10}>
+            <Button color="inherit" variant="ghost" onClick={deactivate}>
+              cancel
+            </Button>
+            <Button color="primary" variant="ghost" onClick={(() => {
+              note.length?deleted(info, note):''
+            })}>
+              sure
+            </Button>
+          </View>
+        </View>
+      </Modal>
+    )
+
+  }
   return (
     <>
       <DropdownMenu width="auto">
@@ -324,15 +433,16 @@ const HandleTable = () => {
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
           <DropdownMenu.Item icon={Edit} selected={true} color="primary">{null}</DropdownMenu.Item>
-          <DropdownMenu.Item icon={Trash2} color="critical">{null}</DropdownMenu.Item>
+          <DropdownMenu.Item icon={Trash2} color="critical" onClick={activate}>{null}</DropdownMenu.Item>
         </DropdownMenu.Content>
       </DropdownMenu>
+      <ModalPage></ModalPage>
     </>
   )
 }
 
 // 修改数据--上下线
-const switchTablePublish = async (data: recordCertificateDataType, isPublish: boolean, setTable: Function) => {
+const switchTablePublish = async (data: recordCertificateDataType, isPublish: boolean, setTable: Function, setSelected: Function) => {
   let publishData = {
     "id": data.id,
     "username": '暂无登录功能',
@@ -343,7 +453,7 @@ const switchTablePublish = async (data: recordCertificateDataType, isPublish: bo
     if (res.code == 200) {
       let tableDataList = await getCertificateData('null');
       setTable(tableDataList)
-
+      setSelected(0)
       // toastShow('操作成功', Check, 'top')
     } else {
       console.error(res.msg)
@@ -369,7 +479,6 @@ const getCertificateData = async (key: string) => {
   } catch (error) {
     console.error('获取全部证书数据接口错误')
   }
-
   return tableDataList;
 }
 

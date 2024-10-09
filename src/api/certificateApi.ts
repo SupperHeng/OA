@@ -48,7 +48,7 @@ export const publishCertificateDataApi = (publishData: publishDataType) => {
     return request.post(baseUrl + '/publish', publishData)
 }
 
-/** 获取全部证书数据api */
+/** 删除证书数据api */
 export const deletedCertificateDataApi = (deletedData: deletedDataType) => {
-    return request.post(baseUrl + '/webGet', deletedData)
+    return request.post(baseUrl + '/delete', deletedData)
 }
