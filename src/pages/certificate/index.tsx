@@ -1,7 +1,7 @@
 // src/pages/Home/index.tsx
 
 import React, { useEffect, useState } from "react";
-import { Button, useToast, View, Resizable, Table, Checkbox, Image, Badge, Text, DropdownMenu, Icon, Switch, Card, RadioGroup, Radio, Tabs, Divider, TextField, Loader, Pagination, Scrim, Skeleton, Modal, Dismissible, useToggle } from "reshaped";
+import { Button, useToast, View, Resizable, Table, Checkbox, Image, Badge, Text, DropdownMenu, Icon, Switch, Card, RadioGroup, Radio, Tabs, Divider, TextField, Loader, Pagination, Scrim, Skeleton, Modal, Dismissible, useToggle, Link } from "reshaped";
 import type { ToastProps } from "reshaped";
 import { Check, Code, ChevronDown, Edit, Trash2, X, Columns, Search } from 'react-feather';
 import {
@@ -191,7 +191,6 @@ const BaseInfoCard = (data: { tableDataList: recordCertificateDataType[], select
     { title1: 'alterTime', value1: res['alterTime']?.slice(0, 11), title2: 'alterUser', value2: res['alterUser'] },
     { title1: 'publishTime', value1: res['publishTime']?.slice(0, 11), title2: 'publishUser', value2: res['publishUser'] },
   ]
-  let certificatePhoto = res['certificatePhoto'];
   // certificatePhoto
   return (
     <>
@@ -205,26 +204,11 @@ const BaseInfoCard = (data: { tableDataList: recordCertificateDataType[], select
 
           </View>
         </View.Item>
-        <View.Item>
-          <View maxWidth='297px' maxHeight='297px'>
-            <BaseInfoCardImage certificatePhoto={certificatePhoto}></BaseInfoCardImage>
-          </View>
-        </View.Item>
       </View>
     </>
   )
 }
-// 基础信息图片内容
-const BaseInfoCardImage = (info: { certificatePhoto: string }) => {
-  let certificatePhoto = info.certificatePhoto;
-  return (
-    <>
-      <Card elevated padding={0}>
-        <Image src={certificatePhoto} alt="Canyon rock" borderRadius="medium" width="300px" height="100%" />
-      </Card>
-    </>
-  )
-}
+
 // 基础信息表格项内容
 const BaseInfoCardItem = (res: { info: { title1: string; value1: string; title2: string; value2: string } }) => {
   let info = res.info;
@@ -253,7 +237,7 @@ const BaseInfoCardItem = (res: { info: { title1: string; value1: string; title2:
 
 // 表格
 const TableCotent = (data: { tableDataList: recordCertificateDataType[], setSelected: Function, selected: number, setTable: Function }) => {
-  const tableHeadList = ['⌘', '证书信息', '颁发对象', '上下线', '操作']
+  const tableHeadList = ['⌘', '证书信息', '证书图片', '颁发对象', '上下线', '操作']
   let tableDataList = data.tableDataList;
   let setSelected = data.setSelected;
   let selected = data.selected;
@@ -308,7 +292,7 @@ const TableCell = (res: { cellValue: recordCertificateDataType, setTable: Functi
   type FooType = keyof typeof cellValue;
   let arr = [] as Array<{ value: string, name: string }>;
   let setTable = res.setTable;
-  let arrKey = ['certificateName', 'certificateNumber', 'winner', 'isPublish']
+  let arrKey = ['certificateName', 'certificateNumber', 'certificatePhoto', 'winner', 'isPublish']
   Object.keys(cellValue).map(item => {
     // 首先去掉id
     if (arrKey.includes(item)) {
@@ -348,18 +332,25 @@ const TableCell = (res: { cellValue: recordCertificateDataType, setTable: Functi
                   <Text variant="caption-1">{item.value.split(';')[1]}</Text>
                 </View.Item>
               </View>
-              : item.name == 'isPublish' ?
-                <Switch
-                  name={String(index)}
-                  checked={Number(item.value) >= 1 ? true : false}
-                  onChange={async (value) => {
-                    await switchTablePublish(res.cellValue, value.checked, setTable, setSelected)
-                    /* Update your state here */
-                  }}></Switch>
-                :
-                <View as="ul">
-                  <View.Item as="li">{item.value}</View.Item>
-                </View>
+              : item.name == 'certificatePhoto' ?
+              <View wrap={true}  >
+                <Link icon={Image} variant="plain" href={item.value} attributes={{ target: "_blank" }}>
+                  {item.value}
+                </Link>
+              </View>
+                
+                : item.name == 'isPublish' ?
+                  <Switch
+                    name={String(index)}
+                    checked={Number(item.value) >= 1 ? true : false}
+                    onChange={async (value) => {
+                      await switchTablePublish(res.cellValue, value.checked, setTable, setSelected)
+                      /* Update your state here */
+                    }}></Switch>
+                  :
+                  <View as="ul">
+                    <View.Item as="li">{item.value}</View.Item>
+                  </View>
             }
 
           </Table.Cell>
@@ -415,7 +406,7 @@ const HandleTable = (res: { info: recordCertificateDataType, setTable: Function 
               cancel
             </Button>
             <Button color="primary" variant="ghost" onClick={(() => {
-              note.length?deleted(info, note):''
+              note.length ? deleted(info, note) : ''
             })}>
               sure
             </Button>
